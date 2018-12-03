@@ -1,0 +1,32 @@
+body {
+	font-family: Century Gothic;
+	padding: 20px 100px;
+}
+
+h1 {
+	font-family: Calibri;
+	color: #47f;
+	font-weight: normal;
+	padding: 10px;
+}
+
+.topic {
+	padding: 30px;
+}
+
+.content {
+	box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+	padding: 50px;
+}
+
+.description {
+	padding: 20px;
+}
+
+.code {
+	font-family: Consolas;
+	color: #468;
+	background-color: #eee;
+	padding: 30px;
+	margin: 0px 50px;
+}
