@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignment 1</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+
+	<div class="topic">
+		<h1>
+			Table
+		</h1>
+		<div class="content">
+			<div class="description">
+				A table is a set of categorized data stored within the database. The pieces of data are contained within cells. Tables contain multiple groups of data as rows, and categorize the cells within those rows according to the type of data they represent, which are the columns. The result is a classified, organized set of data which can have its elements easily isolated or observed. 
+			</div>
+			<div class="code">
+				CREATE TABLE simpletable(color VARCHAR(20), number BIGINT);
+			</div>
+			<div class="description">
+				The given implementation creates a database table in which the data can be categorized to two classes for each set. Any data set entered would have a color value and a number value, and would be one more row entry for the table. 
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Index
+		</h1>
+		<div class="content">
+			<div class="description">
+				The database index is a data structure that contains a whittled down version of certain elements of the database. It might the data within a column or columns, or different cells that are defined to be accessed more frequently than others. The purpose of the index is to make searching through the table as fast and efficient as possible. In the basic scenario, retrieving values from the table would mean having to go through all the values in the table corresponding to the query and performing checks as to whether they satisfy the conditions or not. Indexes can help creating a pathway for locating the values or providing a group value such that comparing with that group value is the same as comparing with all values within that group.
+			</div>
+			<div class="code">
+				CREATE INDEX simpletableindex (color);
+			</div>
+			<div class="description">
+				This statement creates an index based on the color column of the table. Since our table only has two columns it doesn’t offer much of a boost in query speed, but it helps the query find the color values faster, and in a less than linear time. Submitting a query in which we specify the WHERE conditions using the color column values would sped up since the database has a lookup to find where the required objects are. 
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			View
+		</h1>
+		<div class="content">
+			<div class="description">
+				View is a database object that provides a layer of abstraction to the data contained within the tables. A view is created by storing a query, and reading from a view returns values from the actual table that satisfy the query. This has many advantages. For one, it removes the need for repeatedly entering queries and eases the complications from the database client, putting the responsibility of organization on the database system itself. It can also provide additional security, since it would allow a client to see only the data that is presented for them to see and not the other values within the table.
+			</div>
+			<div class="code">
+				CREATE VIEW redthings AS SELECT * FROM simpletable WHERE color = “Red”;
+			</div>
+			<div class="description">
+				The SQL statement above creates a view or pseudo-table that only contains the rows that have their color property as red. Adding more rows to the original table with some of them possessing color red would be reflected when the view is presented. This is useful if we often want to see the red things within the table, or have a user we want to see only the red things in the table.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Cursor
+		</h1>
+		<div class="content">
+			<div class="description">
+				Sometimes the data we require from the table cannot be simply retrieved with a declarative statement. Perhaps we would like to retrieve the data from the table, do some processing and to get a more refined result. This is where a cursor becomes useful. The cursor allows you to iterate through a set of results, as well as retrieving and isolating each element of the result set for processing.
+			</div>
+			<div class="code">
+				DECLARE aretherebluethings VARCHAR(10) DEFAULT “No”;
+				DECLARE done INTEGER DEFAULT 0;
+				DECLARE bluecursor CURSOR FOR SELECT color FROM simplethings;
+				DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+				OPEN bluecursor;
+				Bluecheck: LOOP
+				FETCH bluecursor INTO onecolor;
+				IF done = 1 THEN
+				LEAVE bluecheck;
+				END IF;
+				IF onecolor = “blue” THEN
+				SET aretherebluethings = “Yes”
+				CLOSE bluecursor;
+			</div>
+			<div class="description">
+				In the above statement, there is a cursor declared to iterate through the color view of the simplething stable, and variables to handle the flow of the iteration. The variable aretherebluethings is by default set to no, but in the event that the cursor finds an entry where the color is blue, the variable’s value is changed to yes. The done variable checks to see if the cursor loop should continue after it reaches the end. It is set to 1, which is the stop case, when the NOT FOUND case is called, for which we have declared a handler.	
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Record
+		</h1>
+		<div class="content">
+			<div class="description">
+				The elements of the table that are the set of related data that form a row are also known as records. Usually, a record represents an entity the properties of which are distributed throughout the table according to the category they fall in. 
+			</div>
+			<div class="code">
+				SELECT * FROM simplethingw WHERE color = “green”;
+			</div>
+			<div class="description">
+				Assuming we only have one entry here color is green, the statement would return one record. A record in this table is “Sets of things”. In this case, if the query returns a record that has color set to green and number set to 34, the record describes a set of 34 things that have a green color.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Package
+		</h1>
+		<div class="content">
+			<div class="description">
+				A package is a collection cursors, subprograms, functions, procedures and other database objects packed neatly so as to be easily reusable.
+			</div>
+			<div class="code">
+				CREATE PACKAGE allColors AS
+					FUNCTION makeColor(color VARCHAR(50)) RETURNS VARCHAR(100);
+				END allColors;
+
+				CREATE PACKAGE BODY allColors AS
+					FUNCTION makeColor(color VARCHAR(50)) RETURNS VARCHAR(100);
+						RETURN CONCAT(“This is a ”, color, “ color.”);
+				END allColors;
+			</div>
+			<div class="description">
+				The code above creates a package that contains the function makeColor, which returns a modified string based on the string that has been passed to it.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Procedure
+		</h1>
+		<div class="content">
+			<div class="description">
+				A procedure is an executable set of commands that can be set in the database. This is useful if there is a certain process to retrieve refined data from the data that is necessary and universal. For example, there might be a table with grade values, and usually we would like information like rank and average grade without having to go through the individual grades themselves. In such cases, we can create procedures that do these computations for us and provide us with the results. There are several advantages to such an object; the extra layer of security it provides is one. Additionaly, it reduces the amount of data that is transferred from the database server to the application server.
+			</div>
+			<div class="code">
+				CREATE PROCEDURE ‘total_things’ (out total BIGINT)
+				BEGIN
+					SELECT SUM(number) INTO total FROM simplethings;
+				END
+
+				CALL total_things(@total);
+				SELECT @total;
+			</div>
+			<div class="description">
+				The SQL statement creates a procedure that gets the total number of things from the table simplethings. It does that by simply calling the built in function sum() on the table and specifying the column, then returning it. Once the procedure has been created and stored, we can invoke it by the CALL statement, and supplying the variable to change. After that, can be reused as much as possible.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Function
+		</h1>
+		<div class="content">
+			<div class="description">
+				A function is similar to a procedure, but is different in some key aspects. It actually operates in the same manner as methods in OOP languages. A copy of a value is passed in, some processing logic is carried out and a value is returned. There are multiple built in functions within SQL, used to carry out basic or common operations on data. These functions are divided into scalar and aggregate functions, where scalars take in single values and aggregates take in a set of values, usually retrieved by a select query from a table.
+			</div>
+			<div class="code">
+				CREATE FUNCTION yell(name VARCHAR(50))
+				RETURNS VARCHAR(100) DETERMINISTIC
+				RETURN CONCAT(‘HEY ’, UCASE(name));
+
+				SELECT yell(‘david’);
+			</div>
+			<div class="description">
+				The code above defines a function that receives a string and returns a string with the input changed to uppercase and concatenated with ‘HEY’. When declaring the function the type of input it receives was specified, as well as the type it returns. The third line is the line that shows what the function actually does and returns.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			DB Link
+		</h1>
+		<div class="content">
+			<div class="description">
+				A database link is a connection between multiple database services that allows the user on one database exact changes onto the other database. Creating a database link makes the tables accessible from the linked database, and data can be directly transferred, added, combined or views that extract data from both databases can be declared.
+			</div>
+			<div class="code">
+				CREATE PUBLIC DATABASE LINK server USING ‘server’;
+				SELECT * FROM names@server;
+			</div>
+			<div class="description">
+				The first statement creates an object on the database called server, which serves as the link to the database running on the service known as server. Once the link has been established the user can access and/or alter the tables within server. Here the statements displays the contents of the table names.
+			</div>
+		</div>
+	</div>
+
+	<div class="topic">
+		<h1>
+			Sequence
+		</h1>
+		<div class="content">
+			<div class="description">
+				A sequence is a database object that enables the database to generate sequences of numbers for the purposes of numbering, counting and so on. When entering values like ID, or a key for the table is required, a sequence can be created and the item can be numbered without having to directly enter number data into the database. 
+			</div>
+			<div class="code">
+				CREATE SEQUENCE seq START WITH 10 INCREMENT BY -1 MINVALUE 1 NOCYCLE;
+				CREATE TABLE topten(rank INT, name VARCHAR(50));
+				INSERT INTO topten VALUES(seq.nextval, ‘David’);
+				INSERT INTO topten VALUES(seq.nextval, ‘Fooos’);
+			</div>
+			<div class="description">
+				The code above utilizes sequence to identify the rank of the names entered into the table in a countdown fashion. The first line creates the sequence and initializes it with the parameters START WITH 10, which starts the sequence from 10, INCREMENT BY -1, which counts down by an interval of one per value, MINVALUE 1, which declares the value that identifies the sequences as complete and NOCYCLE, which doesn’t allow values beyond the declared min value to be entered into the table.
+			</div>
+		</div>
+	</div>
+
+	<h1>
+		Constraints
+	</h1>
+	<div class="">
+		Constraints are used to constrain the data that can be entered into the table.		
+	</div>
+
+	<div class="constraints"> 
+
+		<div class="topic">
+			<h1>
+				Unique Key
+			</h1>
+			<div class="content">
+				<div class="description">
+					The constraint UNIQUE ensures that the value entered into a column is unique and does not repeat any value given in the column.
+				</div>
+				<div class="code">
+					CREATE TABLE simplethings (color VARCHAR(50), number INT, objectID INT UNIQUE);
+				</div>
+				<div class="description">
+					In the statement, a table is created with objectId column as unique field. This ensures that for any record entered, no two records can have the same objectID value, and if an insert statement contradicts that, it will not be transacted.
+				</div>
+			</div>
+		</div>
+
+		<div class="topic">
+			<h1>
+				Primary Key
+			</h1>
+			<div class="content">
+				<div class="description">
+					A primary key field is a unique non null field used to identify the record it is a part of. When a table has a primary key specified, the value is used to extract records at the individual level directly. It is also the field commonly used for indexing.
+				</div>
+				<div class="code">
+					CREATE TABLE simplethings(objectId INT, color VARCHAR(50), number INT, PRIMARY KEY(objectId));
+				</div>
+				<div class="description">
+					The above statement creates a table and declares the objectId field of that table as the primary key. This means for any record to be successfully added to the table, it must have an objectId value and that value must be unique to that record.
+				</div>
+			</div>
+		</div>
+
+		<div class="topic">
+			<h1>
+				Not Null
+			</h1>
+			<div class="content">
+				<div class="description">
+					The not null constraint prevents a given field of a record to not be set to null. This is important when the field of a record being empty results in an invalid state within the database.
+				</div>
+				<div class="code">
+					CREATE TABLE simplethings(color VARCHAR(50) NOT NULL, number INT NOT NULL);
+				</div>
+				<div class="description">
+					The table created above makes sure that for every record that has a number, there is a color and for every record that has a color, there is a number. Neither field can hold a null value, and therefore calling select statements will always return present data.
+				</div>
+			</div>
+		</div>
+
+		<div class="topic">
+			<h1>
+				Check
+			</h1>
+			<div class="content">
+				<div class="description">
+					Check is a means of implementing more advanced and code like constraints on fields of a table. It allows comparison, equality, and other logical and mathematical operations yielding a Boolean to determine whether the new record transaction should be committed or not.
+				</div>
+				<div class="code">
+					CREATE TABLE simplethings(color VARCHAR(50), number INT, CHECK(number >= 0));
+				</div>
+				<div class="description">
+					The above statement assures that a record with a negative number for the field number would not be allowed, which would be invalid since counted numbers cannot go less than zero. The check field applied at the end provides the condition that number should be greater than or equal to zero, yielding a Boolean and deciding if the transaction is valid.
+				</div>
+			</div>
+		</div>
+
+		<div class="topic">
+			<h1>
+				Foreign Key
+			</h1>
+			<div class="content">
+				<div class="description">
+					The foreign key constraint makes sure that data being entered into a table is valid by referencing another table that has the set of values that are supposed to be valid. This is a more flexible constraint than check because the permitted values can be changed without altering the structure of the table.
+				</div>
+				<div class="code">
+					CREATE TABLE paintings(painting VARCHAR(50), painter VARCHAR(50), country VARCHAR(50));
+					CREATE TABLE paintingPrices(painting VARCHAR(50), price INT, FOREIGN KEY (painting) REFERENCES paintings(painting));
+				</div>
+				<div class="description">
+					The code above creates related tables paintings and paintingPrices by a foreign key on column painting of table paintingPrices linked to column painting of paintings. This makes sure that any time a painting is entered to the paintingprices table it exists on the paintings table.
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
